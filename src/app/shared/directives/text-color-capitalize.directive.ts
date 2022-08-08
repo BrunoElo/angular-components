@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { CapitalizePipe } from '../pipes/capitalize.pipe';
 
 @Directive({
@@ -9,12 +9,20 @@ export class TextColorCapitalizeDirective {
   textReference: string = '';
   vowelLetters: string[] = ['a', 'e', 'i', 'o', 'u'];
 
-  constructor(private text: ElementRef, private capitalize: CapitalizePipe) {}
+  constructor(
+    private text: ElementRef,
+    private renderer: Renderer2,
+    private capitalize: CapitalizePipe
+  ) {}
 
   @HostListener('mouseenter')
   onMouseEnter() {
     this.textReference = this.text.nativeElement.innerHTML;
-    this.text.nativeElement.innerHTML = this.handleCapitilization();
+    this.renderer.setProperty(
+      this.text.nativeElement,
+      'innerHTML',
+      this.handleCapitilization()
+    );
     let firstSixLetters = this.replaceChars();
     let hexCode = this.appendZeros(firstSixLetters);
     this.changeTextColor(`#${hexCode}`);
@@ -22,7 +30,11 @@ export class TextColorCapitalizeDirective {
 
   @HostListener('mouseleave')
   onMouseLeave() {
-    this.text.nativeElement.innerHTML = this.textReference;
+    this.renderer.setProperty(
+      this.text.nativeElement,
+      'innerHTML',
+      this.textReference
+    );
     this.changeTextColor('');
   }
 
@@ -70,6 +82,6 @@ export class TextColorCapitalizeDirective {
   }
 
   changeTextColor(color: string) {
-    this.text.nativeElement.style.color = color;
+    this.renderer.setStyle(this.text.nativeElement, 'color', color);
   }
 }
