@@ -6,8 +6,8 @@ import { CapitalizePipe } from '../pipes/capitalize.pipe';
   standalone: true,
 })
 export class TextColorCapitalizeDirective {
-  textReference = '';
-  vowelLetters = ['a', 'e', 'i', 'o', 'u'];
+  textReference: string = '';
+  vowelLetters: string[] = ['a', 'e', 'i', 'o', 'u'];
 
   constructor(private text: ElementRef, private capitalize: CapitalizePipe) {}
 
@@ -26,11 +26,13 @@ export class TextColorCapitalizeDirective {
     this.changeTextColor('');
   }
 
-  handleCapitilization() {
-    let isFirstLetterVowel = this.vowelLetters.includes(this.textReference[0]);
-    let textLength = this.textReference.length;
-    let middleLetterIndex = Math.ceil(textLength / 2) - 1;
-    let textCharacters = this.textReference.split('');
+  handleCapitilization(): string {
+    let isFirstLetterVowel: boolean = this.vowelLetters.includes(
+      this.textReference[0]
+    );
+    let textLength: number = this.textReference.length;
+    let middleLetterIndex: number = Math.ceil(textLength / 2) - 1;
+    let textCharacters: string[] = this.textReference.toLowerCase().split('');
 
     textCharacters = textCharacters.map((character, index) => {
       if ([0, middleLetterIndex, textLength - 1].includes(index)) {
@@ -46,16 +48,19 @@ export class TextColorCapitalizeDirective {
     return textCharacters.join('');
   }
 
-  replaceChars() {
-    let firstSixTextChars = this.textReference.slice(0, 6).split('');
+  replaceChars(): string {
+    let firstSixTextChars: string[] = this.textReference
+      .toLowerCase()
+      .slice(0, 6)
+      .split('');
     firstSixTextChars = firstSixTextChars.map((char) =>
       char > 'f' ? 'f' : char
     );
     return firstSixTextChars.join('');
   }
 
-  appendZeros(letters: string) {
-    let remainingChars = 6 - letters.length;
+  appendZeros(letters: string): string {
+    let remainingChars: number = 6 - letters.length;
     if (remainingChars < 6) {
       for (let i = 0; i < remainingChars; i++) {
         letters += '0';

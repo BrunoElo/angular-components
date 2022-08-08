@@ -8,5 +8,5 @@ import { TextColorCapitalizeDirective } from '../shared/directives/text-color-ca
   template: ` <div appTextColorCapitalize>{{ text }}</div> `,
 })
 export class TextComponent {
-  @Input() text = '';
+  @Input() text: string = '';
 }
